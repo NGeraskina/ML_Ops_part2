@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "ml-ops-project"
+version = "0.1.0"
+description = ""
+authors = ["nadya <nadya.geraskina@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.9, <=3.10.6"
+tensorflow = "^2.14.0"
+matplotlib = "^3.8.2"
+aw-client = "^0.5.11"
+tensorflow-io-gcs-filesystem = "0.31.0"
+pre-commit = "^3.5.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
