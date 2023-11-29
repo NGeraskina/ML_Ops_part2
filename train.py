@@ -3,6 +3,7 @@ import re
 import numpy as np
 import pandas as pd
 import tensorflow as tf
+from tf.keras.layers import Embedding
 
 
 def prepare(text):
@@ -36,14 +37,12 @@ def prepare_data(file="./medium_data.csv"):
 
     X, y = input_sequences[:, :-1], input_sequences[:, -1]
     y = tf.keras.utils.to_categorical(y, num_classes=total_words)
-    return X, y, total_words, tokenizer
+    return X, y, total_words, tokenizer, max_sequence_len
 
 
 def train(X, y, total_words):
     model = tf.keras.models.Sequential()
-    model.add(
-        tf.keras.layers.Embedding(total_words, 128, input_length=max_sequence_len - 1)
-    )
+    model.add(Embedding(total_words, 128, input_length=max_sequence_len - 1))
     model.add(tf.keras.layers.LSTM(128))
     model.add(tf.keras.layers.Dense(total_words, activation="softmax"))
     model.compile(
@@ -51,11 +50,11 @@ def train(X, y, total_words):
         optimizer=tf.keras.optimizers.Adam(learning_rate=0.001),
         metrics=["accuracy"],
     )
-    history = model.fit(X, y, epochs=30)
+    model.fit(X, y, epochs=30)
     return model
 
 
 if __name__ == "__main__":
-    X, y, total_words, tokenizer = prepare_data()
+    X, y, total_words, tokenizer, max_sequence_len = prepare_data()
     model = train(X, y, total_words)
     tf.keras.saving.save_model(model, "model.keras", overwrite=True)
