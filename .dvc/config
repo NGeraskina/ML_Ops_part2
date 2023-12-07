@@ -1,0 +1,4 @@
+[core]
+    remote = myremote
+['remote "myremote"']
+    url = https://github.com/NGeraskina/ML_Ops_part2

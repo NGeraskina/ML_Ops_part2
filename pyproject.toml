@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "ml-ops-project"
+name = "ml-ops-project-2"
 version = "0.1.0"
 description = ""
 authors = ["nadya <nadya.geraskina@gmail.com>"]
@@ -12,6 +12,9 @@ matplotlib = "^3.8.2"
 aw-client = "^0.5.11"
 tensorflow-io-gcs-filesystem = "0.31.0"
 pre-commit = "^3.5.0"
+dvc = "^3.30.3"
+hydra-core = "^1.3.2"
+pandas = "^2.1.3"
 
 
 [build-system]

@@ -1,0 +1,7 @@
+predict:
+  model_path: "trained_model.h5"
+  tokenizer_word_index:
+    !include train_config.yaml
+  text: "your_input_text_here"
+  next_words: 10
+  max_sequence_len: 50
