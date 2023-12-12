@@ -5,9 +5,13 @@ import re
 import numpy as np
 import pandas as pd
 import tensorflow as tf
-from tf.keras.layers import Embedding
-import hydra
-from omegaconf import DictConfig, OmegaConf
+from tensorflow.keras.layers import Embedding
+from hydra.experimental import initialize
+from hydra import compose
+import fire
+# import warnings
+#
+# warnings.filterwarnings("ignore")
 
 
 def prepare(text):
@@ -46,12 +50,17 @@ def prepare_data(file="./medium_data.csv"):
     with io.open('tokenizer.json', 'w', encoding='utf-8') as f:
         f.write(json.dumps(tokenizer_json, ensure_ascii=False))
 
+    print(total_words, max_sequence_len)
+    # X.tofile("X.csv", sep=',')
+    # y.tofile("y.csv", sep=',')
     return X, y, total_words, max_sequence_len
 
 
-@hydra.main(config_path="configs", config_name="model_config")
-def train_model(cfg: DictConfig) -> None:
-# def train(X, y, total_words, hidden_layer = 128, activation = 'softmax', lr = 0.001):
+# @hydra.main(config_path="configs", config_name="model_config")
+def train_model(cfg) -> None:
+    X, y, total_words, max_sequence_len = prepare_data()
+    # def train(X, y, total_words, hidden_layer = 128, activation = 'softmax', lr = 0.001):
+    # X, y = pd.read_csv('X.csv'), pd.read_csv('y.csv')
     hidden_layer, activation, lr = cfg.train.hidden_layer, cfg.train.activation, cfg.train.lr
     model = tf.keras.models.Sequential()
     model.add(Embedding(total_words, hidden_layer, input_length=max_sequence_len - 1))
@@ -64,9 +73,10 @@ def train_model(cfg: DictConfig) -> None:
     )
     model.fit(X, y, epochs=30)
     model.save(cfg.train.model_output_path)
-    # return model
 
 
 if __name__ == "__main__":
-    X, y, total_words, max_sequence_len = prepare_data()
-    train_model(X, y, total_words)
+    with initialize(config_path="../config"):
+        cfg = compose(config_name="model_config")
+
+    fire.Fire(train_model(cfg))
