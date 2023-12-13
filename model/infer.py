@@ -1,11 +1,12 @@
 import json
+
 import numpy as np
 import tensorflow as tf
 
 
 def predict(text, next_words, model, max_sequence_len):
     for _ in range(next_words):
-        with open('tokenizer.json') as f:
+        with open("tokenizer.json") as f:
             data = json.load(f)
             tokenizer = tf.keras.preprocessing.text.tokenizer_from_json(data)
         token_list = tokenizer.texts_to_sequences([text])[0]

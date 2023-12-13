@@ -1,7 +1,4 @@
 [core]
     remote = mystorage
 ['remote "mystorage"']
-    url = s3://ml-ops-part-2
-    endpointurl = https://storage.yandexcloud.net
-    access_key_id = YCAJEyafXXTZB9XgRnKmwQvsa
-    secret_access_key = YCNcozVTAhY7xLJmmYrTYvtzT0ExEixrQLNm6OLi
+    url = gdrive://1QcyaOQo1aipYdyVoNBpm9gEu8OXIlDsM
