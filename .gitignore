@@ -166,3 +166,4 @@ cython_debug/
 /trained_model.h5
 /tokenizer.json
 /trained_model.keras
+/test_data_infered.csv
