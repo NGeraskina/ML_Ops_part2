@@ -1,5 +1,0 @@
-outs:
-- md5: 4d99e0a888d608e217c2f423262bace5
-  size: 27011574
-  hash: md5
-  path: trained_model.keras
