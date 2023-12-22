@@ -1,17 +1,13 @@
 import json
-from io import StringIO
 
-import numpy as np
-import tensorflow as tf
-import pandas as pd
+import dvc.api
 import fire
-
+import numpy as np
+import pandas as pd
+import tensorflow as tf
 from hydra import compose
 from hydra.experimental import initialize
-
 from keras.models import load_model
-import dvc.api
-import joblib
 
 
 def predict(cfg) -> None:
@@ -21,34 +17,19 @@ def predict(cfg) -> None:
         cfg.infer.max_sequence_len,
     )
 
-    repo = 'https://github.com/NGeraskina/ML_Ops_part2'
+    repo = "https://github.com/NGeraskina/ML_Ops_part2"
 
-    with dvc.api.open('data/test_data.csv',
-                      repo=repo,
-                      encoding='utf-8'
-                      ) as test:
+    with dvc.api.open("data/test_data.csv", repo=repo, encoding="utf-8") as test:
         X = pd.read_csv(test)
 
-    fs = dvc.api.DVCFileSystem(repo).get(model_path, lpath="model.h5")
-    # with fs.open("trained_model.h5") as f:
-    model = load_model('test.h5')
-
-    # contents = dvc.api.read(path="trained_model.keras", repo=repo, encoding='utf-8')
-    # model = load_model(StringIO(contents))
-
-    # with dvc.api.open('trained_model.h5',
-    #                   repo=repo
-    #                   ) as model:
-    # model = load_model(StringIO(contents))
+    dvc.api.DVCFileSystem(repo).get(model_path, lpath="model.h5")
+    model = load_model("model.h5")
 
     pred = []
-
-    for text in X['title_new']:
-        text += ' '
+    for text in X["title_new"]:
+        text += " "
         for _ in range(next_words):
-            with dvc.api.open("tokenizer.json",
-                              repo=repo
-                              ) as f:
+            with dvc.api.open("tokenizer.json", repo=repo) as f:
                 data = json.load(f)
                 tokenizer = tf.keras.preprocessing.text.tokenizer_from_json(data)
             token_list = tokenizer.texts_to_sequences([text])[0]
@@ -61,8 +42,8 @@ def predict(cfg) -> None:
                     text += word + " "
         pred.append(text)
 
-    X['predict'] = pred
-    X.to_csv('test_data_infered.csv')
+    X["predict"] = pred
+    X.to_csv("test_data_infered.csv")
     return None
 
 

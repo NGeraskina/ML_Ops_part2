@@ -2,6 +2,7 @@ import io
 import json
 import re
 
+import dvc.api
 import fire
 import numpy as np
 import pandas as pd
@@ -9,7 +10,6 @@ import tensorflow as tf
 from hydra import compose
 from hydra.experimental import initialize
 from tensorflow.keras.layers import Embedding
-import dvc.api
 
 
 def prepare(text):
@@ -19,24 +19,13 @@ def prepare(text):
 
 
 def prepare_data():
-    repo = 'https://github.com/NGeraskina/ML_Ops_part2'
-
-    # file = dvc.api.read('data/medium_data.csv',
-    #                     repo=repo,
-    #                     encoding='utf-8'
-    #                     )
-    with dvc.api.open('data/medium_data.csv',
-                        repo=repo,
-                        encoding='utf-8'
-                        ) as file:
+    repo = "https://github.com/NGeraskina/ML_Ops_part2"
+    with dvc.api.open("data/medium_data.csv", repo=repo, encoding="utf-8") as file:
         df = pd.read_csv(file, parse_dates=["date"])
     df.title = df.title.apply(lambda x: prepare(x))
-    tokenizer = tf.keras.preprocessing.text.Tokenizer(
-        oov_token="<oov>"
-    )  # айди для тех слов, которых нет в словаре
+    tokenizer = tf.keras.preprocessing.text.Tokenizer(oov_token="<oov>")
     tokenizer.fit_on_texts(df.title)
     total_words = len(tokenizer.word_index) + 1
-
     input_sequences = []
     for line in df.title:
         token_list = tokenizer.texts_to_sequences([line])[0]
@@ -81,7 +70,6 @@ def train_model(cfg) -> None:
         loss="categorical_crossentropy",
         optimizer=tf.keras.optimizers.Adam(learning_rate=lr),
         metrics=["accuracy"],
-
     )
     model.fit(X, y, epochs=epoch)
     model.save(cfg.train.model_output_path)
