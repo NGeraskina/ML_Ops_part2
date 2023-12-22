@@ -167,3 +167,5 @@ cython_debug/
 /tokenizer.json
 /trained_model.keras
 /test_data_infered.csv
+
+.idea/
