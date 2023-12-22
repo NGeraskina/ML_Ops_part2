@@ -9,6 +9,7 @@ import tensorflow as tf
 from hydra import compose
 from hydra.experimental import initialize
 from tensorflow.keras.layers import Embedding
+import dvc.api
 
 
 def prepare(text):
@@ -17,8 +18,18 @@ def prepare(text):
     return text
 
 
-def prepare_data(file="./medium_data.csv"):
-    df = pd.read_csv(file, parse_dates=["date"])
+def prepare_data():
+    repo = 'https://github.com/NGeraskina/ML_Ops_part2'
+
+    # file = dvc.api.read('data/medium_data.csv',
+    #                     repo=repo,
+    #                     encoding='utf-8'
+    #                     )
+    with dvc.api.open('data/medium_data.csv',
+                        repo=repo,
+                        encoding='utf-8'
+                        ) as file:
+        df = pd.read_csv(file, parse_dates=["date"])
     df.title = df.title.apply(lambda x: prepare(x))
     tokenizer = tf.keras.preprocessing.text.Tokenizer(
         oov_token="<oov>"
@@ -48,8 +59,6 @@ def prepare_data(file="./medium_data.csv"):
         f.write(json.dumps(tokenizer_json, ensure_ascii=False))
 
     print(total_words, max_sequence_len)
-    # X.tofile("X.csv", sep=',')
-    # y.tofile("y.csv", sep=',')
     return X, y, total_words, max_sequence_len
 
 
@@ -58,10 +67,11 @@ def train_model(cfg) -> None:
     X, y, total_words, max_sequence_len = prepare_data()
     # def train(X, y, total_words, hidden_layer = 128, activation = 'softmax', lr = 0.001):
     # X, y = pd.read_csv('X.csv'), pd.read_csv('y.csv')
-    hidden_layer, activation, lr = (
+    hidden_layer, activation, lr, epoch = (
         cfg.train.hidden_layer,
         cfg.train.activation,
         cfg.train.lr,
+        cfg.train.epoch,
     )
     model = tf.keras.models.Sequential()
     model.add(Embedding(total_words, hidden_layer, input_length=max_sequence_len - 1))
@@ -71,8 +81,9 @@ def train_model(cfg) -> None:
         loss="categorical_crossentropy",
         optimizer=tf.keras.optimizers.Adam(learning_rate=lr),
         metrics=["accuracy"],
+
     )
-    model.fit(X, y, epochs=30)
+    model.fit(X, y, epochs=epoch)
     model.save(cfg.train.model_output_path)
 
 

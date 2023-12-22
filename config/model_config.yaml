@@ -2,7 +2,8 @@ train:
   hidden_layer: 128
   activation : 'softmax'
   lr : 0.001
-  model_output_path: "trained_model.h5"
+  model_output_path: "trained_model.keras"
+  epoch: 1
 
 
 infer:
