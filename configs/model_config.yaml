@@ -2,11 +2,11 @@ train:
   hidden_layer: 128
   activation : 'softmax'
   lr : 0.001
-  model_output_path: "trained_model.h5"
+  model_output_path: "../models/trained_model.h5"
   epoch: 30
 
 
 infer:
   next_words: 5
-  model_path: "trained_model.h5"
+  model_path: "../models/trained_model.h5"
   max_sequence_len: 40

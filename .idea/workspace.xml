@@ -6,6 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="1fd9c3b1-8eef-4ce4-8b37-9cbe0a4335d3" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/configs/model_config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/configs/model_config.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/infer.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/train.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/poetry.lock" beforeDir="false" afterPath="$PROJECT_DIR$/poetry.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tokenizer.json.dvc" beforeDir="false" afterPath="$PROJECT_DIR$/models/tokenizer.json.dvc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trained_model.h5.dvc" beforeDir="false" afterPath="$PROJECT_DIR$/models/trained_model.h5.dvc" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,6 +40,7 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\nadya\PycharmProjects\ML_Ops_part2\models" />
       <recent name="C:\Users\nadya\PycharmProjects\MLOPS_2" />
       <recent name="C:\Users\nadya\PycharmProjects\MLOPS_2\data" />
     </key>
