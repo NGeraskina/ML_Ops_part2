@@ -163,3 +163,5 @@ cython_debug/
 !.git/hooks/README*
 /medium_data.csv
 
+/trained_model.h5
+/tokenizer.json

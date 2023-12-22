@@ -3,3 +3,9 @@ train:
   activation : 'softmax'
   lr : 0.001
   model_output_path: "trained_model.h5"
+
+
+infer:
+  next_words: 5
+  model_path: "trained_model.h5"
+  max_sequence_len: 40

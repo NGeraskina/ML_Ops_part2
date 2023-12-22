@@ -1,0 +1,5 @@
+outs:
+- md5: 470eaf5ba48293c35a004b26241ecb70
+  size: 27022280
+  hash: md5
+  path: trained_model.h5
