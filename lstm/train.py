@@ -1,6 +1,7 @@
 import io
 import json
 import re
+import subprocess
 
 import dvc.api
 import fire
@@ -10,6 +11,8 @@ import tensorflow as tf
 from hydra import compose
 from hydra.experimental import initialize
 from tensorflow.keras.layers import Embedding
+import mlflow
+import toml
 
 
 def prepare(text):
@@ -44,7 +47,7 @@ def prepare_data():
     y = tf.keras.utils.to_categorical(y, num_classes=total_words)
 
     tokenizer_json = tokenizer.to_json()
-    with io.open("tokenizer.json", "w", encoding="utf-8") as f:
+    with io.open("models/tokenizer.json", "w", encoding="utf-8") as f:
         f.write(json.dumps(tokenizer_json, ensure_ascii=False))
 
     print(total_words, max_sequence_len)
@@ -53,26 +56,52 @@ def prepare_data():
 
 # @hydra.main(config_path="configs", config_name="model_config")
 def train_model(cfg) -> None:
-    X, y, total_words, max_sequence_len = prepare_data()
-    # def train(X, y, total_words, hidden_layer = 128, activation = 'softmax', lr = 0.001):
-    # X, y = pd.read_csv('X.csv'), pd.read_csv('y.csv')
-    hidden_layer, activation, lr, epoch = (
-        cfg.train.hidden_layer,
-        cfg.train.activation,
-        cfg.train.lr,
-        cfg.train.epoch,
-    )
-    model = tf.keras.models.Sequential()
-    model.add(Embedding(total_words, hidden_layer, input_length=max_sequence_len - 1))
-    model.add(tf.keras.layers.LSTM(hidden_layer))
-    model.add(tf.keras.layers.Dense(total_words, activation=activation))
-    model.compile(
-        loss="categorical_crossentropy",
-        optimizer=tf.keras.optimizers.Adam(learning_rate=lr),
-        metrics=["accuracy"],
-    )
-    model.fit(X, y, epochs=epoch)
-    model.save(cfg.train.model_output_path)
+    with mlflow.start_run():
+        config_path = "mlflow_config.toml"
+        config = toml.load(config_path)
+        mlflow.set_tracking_uri(
+            f"http://{config['server']['host']}:{config['server']['port']}"
+        )
+
+        git_commit_id = (
+            subprocess.check_output(["git", "rev-parse", "--short", "HEAD"])
+                .strip()
+                .decode("utf-8")
+        )
+
+        mlflow.log_param("git_commit_id", git_commit_id)
+        mlflow.log_param("hidden_layer", cfg.train.hidden_layer)
+
+        X, y, total_words, max_sequence_len = prepare_data()
+        # def train(X, y, total_words, hidden_layer = 128, activation = 'softmax', lr = 0.001):
+        # X, y = pd.read_csv('X.csv'), pd.read_csv('y.csv')
+        hidden_layer, activation, lr, epoch = (
+            cfg.train.hidden_layer,
+            cfg.train.activation,
+            cfg.train.lr,
+            cfg.train.epoch,
+        )
+
+        model = tf.keras.models.Sequential()
+        model.add(Embedding(total_words, hidden_layer, input_length=max_sequence_len - 1))
+        model.add(tf.keras.layers.LSTM(hidden_layer))
+        model.add(tf.keras.layers.Dense(total_words, activation=activation))
+        model.compile(
+            loss="categorical_crossentropy",
+            optimizer=tf.keras.optimizers.Adam(learning_rate=lr),
+            metrics=["accuracy", 'mse'],
+        )
+
+        history = model.fit(X, y, epochs=epoch)
+        print(history.history.keys())
+
+        for i in range(epoch):
+
+            mlflow.log_metric("Accuracy_train", history.history['accuracy'][i], step = i)
+            mlflow.log_metric("MSE_train", history.history['mse'][i], step = i)
+            mlflow.log_metric("Categorical_crossentropy_train", history.history['loss'][i], step = i)
+
+        model.save(cfg.train.model_output_path)
 
 
 if __name__ == "__main__":

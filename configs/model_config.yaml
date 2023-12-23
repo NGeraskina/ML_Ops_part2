@@ -1,9 +1,9 @@
 train:
-  hidden_layer: 128
+  hidden_layer: 64
   activation : 'softmax'
   lr : 0.001
   model_output_path: "../models/trained_model.h5"
-  epoch: 30
+  epoch: 4
 
 
 infer:
