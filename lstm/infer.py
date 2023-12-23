@@ -45,7 +45,7 @@ def predict(cfg) -> None:
 
     X["predict"] = pred
     X.to_csv(
-        f"predicted/test_data_infered_{dt.datetime.now().strftime('%Y_%m_%d_%H_%M')}.csv"
+        f"test_data_infered_{dt.datetime.now().strftime('%Y_%m_%d_%H_%M')}.csv"
     )
     return None
 
