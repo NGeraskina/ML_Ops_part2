@@ -1,3 +1,4 @@
+import datetime as dt
 import json
 
 import dvc.api
@@ -43,7 +44,7 @@ def predict(cfg) -> None:
         pred.append(text)
 
     X["predict"] = pred
-    X.to_csv("test_data_infered.csv")
+    X.to_csv(f"test_data_infered_{dt.datetime.now().strftime('%Y_%m_%d_%H_%M')}.csv")
     return None
 
 

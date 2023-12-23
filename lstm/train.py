@@ -5,14 +5,14 @@ import subprocess
 
 import dvc.api
 import fire
+import mlflow
 import numpy as np
 import pandas as pd
 import tensorflow as tf
+import toml
 from hydra import compose
 from hydra.experimental import initialize
 from tensorflow.keras.layers import Embedding
-import mlflow
-import toml
 
 
 def prepare(text):
@@ -65,8 +65,8 @@ def train_model(cfg) -> None:
 
         git_commit_id = (
             subprocess.check_output(["git", "rev-parse", "--short", "HEAD"])
-                .strip()
-                .decode("utf-8")
+            .strip()
+            .decode("utf-8")
         )
 
         mlflow.log_param("git_commit_id", git_commit_id)
@@ -83,23 +83,26 @@ def train_model(cfg) -> None:
         )
 
         model = tf.keras.models.Sequential()
-        model.add(Embedding(total_words, hidden_layer, input_length=max_sequence_len - 1))
+        model.add(
+            Embedding(total_words, hidden_layer, input_length=max_sequence_len - 1)
+        )
         model.add(tf.keras.layers.LSTM(hidden_layer))
         model.add(tf.keras.layers.Dense(total_words, activation=activation))
         model.compile(
             loss="categorical_crossentropy",
             optimizer=tf.keras.optimizers.Adam(learning_rate=lr),
-            metrics=["accuracy", 'mse'],
+            metrics=["accuracy", "mse"],
         )
 
         history = model.fit(X, y, epochs=epoch)
         print(history.history.keys())
 
         for i in range(epoch):
-
-            mlflow.log_metric("Accuracy_train", history.history['accuracy'][i], step = i)
-            mlflow.log_metric("MSE_train", history.history['mse'][i], step = i)
-            mlflow.log_metric("Categorical_crossentropy_train", history.history['loss'][i], step = i)
+            mlflow.log_metric("Accuracy_train", history.history["accuracy"][i], step=i)
+            mlflow.log_metric("MSE_train", history.history["mse"][i], step=i)
+            mlflow.log_metric(
+                "Categorical_crossentropy_train", history.history["loss"][i], step=i
+            )
 
         model.save(cfg.train.model_output_path)
 
