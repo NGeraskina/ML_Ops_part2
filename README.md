@@ -5,8 +5,6 @@ first words
 
 ## Initial configuration
 
-`setup.py` is planned, for now manual installation
-
 For usage:
 
 1. install `poetry`
