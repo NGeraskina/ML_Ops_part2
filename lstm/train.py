@@ -50,11 +50,9 @@ def prepare_data():
     with io.open("models/tokenizer.json", "w", encoding="utf-8") as f:
         f.write(json.dumps(tokenizer_json, ensure_ascii=False))
 
-    print(total_words, max_sequence_len)
     return X, y, total_words, max_sequence_len
 
 
-# @hydra.main(config_path="configs", config_name="model_config")
 def train_model(cfg) -> None:
     with mlflow.start_run():
         config_path = "mlflow_config.toml"
@@ -95,7 +93,6 @@ def train_model(cfg) -> None:
         )
 
         history = model.fit(X, y, epochs=epoch)
-        print(history.history.keys())
 
         for i in range(epoch):
             mlflow.log_metric("Accuracy_train", history.history["accuracy"][i], step=i)
