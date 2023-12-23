@@ -17,7 +17,7 @@ For development:
 - run `pre-commint install`
 - run `dvc pull` to get all datasets and models
 
-# General scheme
+## General scheme
 
 1. Preprocessing: make lower case, delete unwanted spaces, train tokenizer and tokenize input data
 2. LSTM training: NN consists of Embedding, LSTM and Dense layers 
