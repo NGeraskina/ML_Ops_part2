@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "ml_ops_project_2"
+name = "ml_ops_part2"
 version = "0.1.0"
 description = ""
 authors = ["nadya <nadya.geraskina@gmail.com>"]

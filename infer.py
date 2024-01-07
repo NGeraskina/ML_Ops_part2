@@ -30,7 +30,7 @@ def predict(cfg) -> None:
     for text in X["title_new"]:
         text += " "
         for _ in range(next_words):
-            with dvc.api.open("../models/tokenizer.json", repo=repo) as f:
+            with dvc.api.open("models/tokenizer.json", repo=repo) as f:
                 data = json.load(f)
                 tokenizer = tf.keras.preprocessing.text.tokenizer_from_json(data)
             token_list = tokenizer.texts_to_sequences([text])[0]
@@ -49,6 +49,6 @@ def predict(cfg) -> None:
 
 
 if __name__ == "__main__":
-    with initialize(config_path="../configs"):
+    with initialize(config_path="configs"):
         cfg = compose(config_name="model_config")
     fire.Fire(predict(cfg))

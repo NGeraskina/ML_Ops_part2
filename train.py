@@ -103,7 +103,7 @@ def train_model(cfg) -> None:
 
 
 if __name__ == "__main__":
-    with initialize(config_path="../configs"):
+    with initialize(config_path="configs"):
         cfg = compose(config_name="model_config")
 
     fire.Fire(train_model(cfg))
