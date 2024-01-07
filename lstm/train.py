@@ -55,10 +55,8 @@ def prepare_data():
 
 def train_model(cfg) -> None:
     with mlflow.start_run():
-        config_path = "mlflow_config.toml"
-        config = toml.load(config_path)
         mlflow.set_tracking_uri(
-            f"http://{config['server']['host']}:{config['server']['port']}"
+            f"http://{cfg.train.host}:{cfg.train.port}"
         )
 
         git_commit_id = (
