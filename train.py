@@ -9,7 +9,6 @@ import mlflow
 import numpy as np
 import pandas as pd
 import tensorflow as tf
-import toml
 from hydra import compose
 from hydra.experimental import initialize
 from tensorflow.keras.layers import Embedding
@@ -55,9 +54,7 @@ def prepare_data():
 
 def train_model(cfg) -> None:
     with mlflow.start_run():
-        mlflow.set_tracking_uri(
-            f"http://{cfg.train.host}:{cfg.train.port}"
-        )
+        mlflow.set_tracking_uri(f"http://{cfg.train.host}:{cfg.train.port}")
 
         git_commit_id = (
             subprocess.check_output(["git", "rev-parse", "--short", "HEAD"])
