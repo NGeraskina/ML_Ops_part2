@@ -8,7 +8,7 @@ first words
 For usage:
 
 1. install `poetry`
-2. run `poetry lock`
+2. run `poetry install --no-root`
 
 For development:
 
