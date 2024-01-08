@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "ml-ops-part2"
+name = "lstm_prediction"
 version = "1.1.0"
 description = "mlops"
 authors = ["nadya <nadya.geraskina@gmail.com>"]
