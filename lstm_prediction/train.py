@@ -20,8 +20,8 @@ def prepare(text):
     return text
 
 
-def prepare_data():
-    repo = "https://github.com/NGeraskina/ml-ops-part2"
+def prepare_data(repo):
+
     with dvc.api.open("data/medium_data.csv", repo=repo, encoding="utf-8") as file:
         df = pd.read_csv(file, parse_dates=["date"])
     df.title = df.title.apply(lambda x: prepare(x))
@@ -65,7 +65,7 @@ def train_model(cfg) -> None:
         mlflow.log_param("git_commit_id", git_commit_id)
         mlflow.log_param("hidden_layer", cfg.train.hidden_layer)
 
-        X, y, total_words, max_sequence_len = prepare_data()
+        X, y, total_words, max_sequence_len = prepare_data(cfg.train.repo)
         # def train(X, y, total_words, hidden_layer = 128, activation = 'softmax', lr = 0.001):
         # X, y = pd.read_csv('X.csv'), pd.read_csv('y.csv')
         hidden_layer, activation, lr, epoch = (

@@ -6,9 +6,11 @@ train:
   epoch: 20
   host: '128.0.1.1'
   port: 8080
+  repo: "https://github.com/NGeraskina/ml-ops-part2"
 
 
 infer:
   next_words: 5
   model_path: "../models/trained_model.h5"
   max_sequence_len: 40
+  repo: "https://github.com/NGeraskina/ml-ops-part2"
