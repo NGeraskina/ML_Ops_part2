@@ -4,7 +4,7 @@ train:
   lr : 0.001
   model_output_path: "../models/trained_model.h5"
   epoch: 20
-  host: '127.0.1.1'
+  host: '128.0.1.1'
   port: 8080
 
 

@@ -18,7 +18,7 @@ def predict(cfg) -> None:
         cfg.infer.max_sequence_len,
     )
 
-    repo = "https://github.com/NGeraskina/ML_Ops_part2"
+    repo = "https://github.com/NGeraskina/ml-ops-part2"
 
     with dvc.api.open("data/test_data.csv", repo=repo, encoding="utf-8") as test:
         X = pd.read_csv(test)
