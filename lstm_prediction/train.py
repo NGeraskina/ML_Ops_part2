@@ -21,7 +21,6 @@ def prepare(text):
 
 
 def prepare_data(repo):
-
     with dvc.api.open("data/medium_data.csv", repo=repo, encoding="utf-8") as file:
         df = pd.read_csv(file, parse_dates=["date"])
     df.title = df.title.apply(lambda x: prepare(x))
