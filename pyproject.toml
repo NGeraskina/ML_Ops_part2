@@ -6,7 +6,7 @@ authors = ["nadya <nadya.geraskina@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">=3.9, <=3.10.6"
+python = ">=3.9, <=3.11"
 tensorflow = "^2.15.0"
 tensorflow_intel = "^2.15.0"
 aw-client = "^0.5.11"
